@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">BTCUpdates</string>
+
+    <!-- Navigation   -->
+    <string name="screen_title_home">Home</string>
+    <string name="screen_title_history">History</string>
+
+    <!--  Welcome Screen  -->
+    <string name="welcome">Welcome</string>
+    <string name="welcome_new_user">Welcome</string>
+    <string name="welcome_existing_user">Welcome</string>
+    <string name="enter_bitcoin_value">How much Bitcoin do you currently own?</string>
+    <string name="update_bitcoin_value">Do you want to update your Bitcoin value?</string>
+    <string name="done">Done</string>
+</resources>
