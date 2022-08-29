@@ -14,7 +14,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import com.example.btcupdates.R
 import com.example.btcupdates.presentation.navigation.Screen

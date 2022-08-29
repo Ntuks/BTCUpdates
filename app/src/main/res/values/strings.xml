@@ -15,7 +15,8 @@
 
     <!-- Dashboard -->
     <string name="currency">Currency</string>
-    <string name="value">Value</string>
+    <string name="current_value">Current Value</string>
+    <string name="value_change">Value Change</string>
     <string name="indicator">Indicator</string>
 
     <!-- Home Screen -->

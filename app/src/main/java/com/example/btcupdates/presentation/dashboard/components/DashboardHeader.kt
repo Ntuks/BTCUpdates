@@ -16,7 +16,8 @@ import com.example.btcupdates.R
 
 @Composable
 fun DashboardHeader(
-    title: String,
+    titleId: Int,
+    columnNameId: Int,
     bitcoinCurrentValue: String,
 ) {
     Column(
@@ -28,7 +29,7 @@ fun DashboardHeader(
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(
-            text = title,
+            text = stringResource(titleId),
             style = MaterialTheme.typography.h6,
             color = MaterialTheme.colors.onSurface,
             maxLines = 2,
@@ -63,8 +64,12 @@ fun DashboardHeader(
                 modifier = Modifier.padding(end = 30.dp)
             )
             Text(
-                text = stringResource(R.string.value),
+                text = stringResource(columnNameId),
                 modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "%",
+                modifier = Modifier.padding(16.dp)
             )
             Text(text = "*${stringResource(R.string.indicator)}")
         }

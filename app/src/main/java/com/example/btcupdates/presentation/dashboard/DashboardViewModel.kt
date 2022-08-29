@@ -5,16 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.btcupdates.domain.Result
-import com.example.btcupdates.domain.models.CURRENCY.AUD
-import com.example.btcupdates.domain.models.CURRENCY.BTC
-import com.example.btcupdates.domain.models.CURRENCY.USD
-import com.example.btcupdates.domain.models.CURRENCY.ZAR
-import com.example.btcupdates.domain.models.Fluctuation
+import com.example.btcupdates.domain.models.CURRENCY.*
 import com.example.btcupdates.domain.models.FluctuationData
 import com.example.btcupdates.domain.repository.CurrencyConversionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
@@ -78,7 +75,6 @@ class DashboardViewModel @Inject constructor (
                         errorMessage = result.message
                     )
                     is Result.Success -> {
-                        println(result.data)
                         val updatedData = result.data as FluctuationData
                         if (isDailyFluctuation) {
                             state.value.copy(

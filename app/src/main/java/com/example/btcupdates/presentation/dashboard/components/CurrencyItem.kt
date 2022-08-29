@@ -8,10 +8,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.btcupdates.R
 import com.example.btcupdates.domain.models.ConversionData
 import com.example.btcupdates.domain.models.Fluctuation
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import kotlin.math.roundToLong
 
 @Composable
 fun CurrencyItem(
@@ -31,6 +35,9 @@ fun CurrencyItem(
         else -> colorResource(R.color.white) to painterResource(R.drawable.sync_problem)
     }
 
+    val df = DecimalFormat("#.###")
+    df.roundingMode = RoundingMode.DOWN
+
     Row(
         modifier = Modifier.wrapContentHeight(),
         verticalAlignment= Alignment.CenterVertically,
@@ -38,13 +45,20 @@ fun CurrencyItem(
     ){
         Text(
             text = "${conversionData.query.to}: ",
-            modifier = Modifier.padding(end = 40.dp)
+            modifier = Modifier.padding(end = 50.dp)
         )
         Text(
-            text = conversionData.result.toString(),
+            text = df.format(conversionData.result).toString(),
+            textAlign = TextAlign.Center,
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 16.dp)
+        )
+        Text(
+            text = df.format(fluctuationData.changePct).toString(),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .weight(1f)
         )
         Icon(
             painter = tintAndIcon.second,

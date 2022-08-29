@@ -7,18 +7,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.btcupdates.presentation.navigation.BottomNavigationBar
 import com.example.btcupdates.presentation.navigation.NavigationSetup
+import com.example.btcupdates.presentation.navigation.Screen
 import com.example.btcupdates.presentation.navigation.TopBar
 import com.example.btcupdates.ui.theme.BTCUpdatesTheme
-import com.example.btcupdates.presentation.navigation.Screen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,27 +29,26 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val navController = rememberNavController()
-                    // Subscribe to navBackStackEntry, required to get current route
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-                    // State of bottomBar
+                    val topBarState = rememberSaveable { mutableStateOf(Pair(false, 0)) }
                     val bottomNavBarState = rememberSaveable { mutableStateOf(false) }
 
-                    // State of topBar
-                    val currentRoute = navBackStackEntry?.destination?.route ?: stringResource(R.string.app_name)
-                    val topBarState = rememberSaveable { mutableStateOf(Pair(false, currentRoute)) }
-
-                    // Control TopBar and BottomBar
-                    when (currentRoute) {
-                        Screen.Welcome.route -> {
-                            bottomNavBarState.value = false
-                            topBarState.value = Pair(false, currentRoute)
-                        }
-                        else -> {
-                            bottomNavBarState.value = true
-                            val screenName = stringResource(R.string.app_name)
-                            topBarState.value = Pair(true, screenName)
+                    val navController = rememberNavController()
+                    navController.addOnDestinationChangedListener{ _, dest, _ ->
+                        when (dest.route?.substringBefore("/")) {
+                            Screen.Welcome.route -> {
+                                bottomNavBarState.value = false
+                                topBarState.value = Pair(false, 0)
+                            }
+                            Screen.Home.route -> {
+                                bottomNavBarState.value = true
+                                topBarState.value = Pair(true, R.string.screen_title_home)
+                            }
+                            Screen.History.route -> {
+                                bottomNavBarState.value = true
+                                topBarState.value = Pair(true, R.string.screen_title_history)
+                            }
+                            else -> Unit
                         }
                     }
 

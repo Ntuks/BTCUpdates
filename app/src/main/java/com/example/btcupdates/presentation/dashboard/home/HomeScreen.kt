@@ -58,7 +58,8 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DashboardHeader(
-                title = stringResource(R.string.recorded_value),
+                titleId = R.string.recorded_value,
+                columnNameId = R.string.current_value,
                 bitcoinCurrentValue = bitcoinCurrentValue.toString()
             )
             if (state.isLoading){

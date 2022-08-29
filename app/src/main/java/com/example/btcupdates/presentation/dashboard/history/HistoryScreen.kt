@@ -56,7 +56,8 @@ fun HistoryScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DashboardHeader(
-                title = stringResource(R.string.history_screen_description),
+                titleId = R.string.history_screen_description,
+                columnNameId = R.string.value_change,
                 bitcoinCurrentValue = bitcoinCurrentValue.toString()
             )
             if (state.isLoading){
