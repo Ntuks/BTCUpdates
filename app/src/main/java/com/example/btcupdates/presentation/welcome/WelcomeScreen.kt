@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import com.example.btcupdates.R
 import com.example.btcupdates.presentation.navigation.Screen
@@ -25,7 +26,9 @@ fun WelcomeScreen(
 ) {
     val state = viewModel.state
     val cachedValueState = viewModel.cachedValueFlow.collectAsState(null)
+
     val text = remember{ mutableStateOf("") }
+    val inputIsInValid = remember{ mutableStateOf(false) }
 
     var bitcoinMessageId = state.bitcoinMessageId
     if (state.amount == null && cachedValueState.value != null) {
@@ -69,11 +72,20 @@ fun WelcomeScreen(
             modifier = Modifier
                 .padding(32.dp)
                 .fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            isError = inputIsInValid.value,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             onValueChange = {
                 text.value = it.trimEnd()
-                if (text.value.isNotEmpty() && text.value != state.amount.toString())
-                    viewModel.onEvent(WelcomeScreenEvent.AddEditBitcoin(it.toDouble()))
+                if (text.value.isNotEmpty()) {
+                    if (Regex("^[0-9_.-]*\$").matches(text.value)){
+                        if (text.value != state.amount.toString())
+                            viewModel.onEvent(WelcomeScreenEvent.AddEditBitcoin(it.toDouble()))
+
+                        inputIsInValid.value = false
+                    } else {
+                        inputIsInValid.value = true
+                    }
+                }
             }
         )
 
