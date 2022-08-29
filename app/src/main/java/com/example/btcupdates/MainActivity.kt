@@ -49,14 +49,9 @@ class MainActivity : ComponentActivity() {
                             bottomNavBarState.value = false
                             topBarState.value = Pair(false, currentRoute)
                         }
-                        Screen.Home.route -> {
-                            bottomNavBarState.value = true
-                            val screenName = stringResource(R.string.screen_title_home)
-                            topBarState.value = Pair(true, screenName)
-                        }
                         else -> {
                             bottomNavBarState.value = true
-                            val screenName = stringResource(R.string.screen_title_history)
+                            val screenName = stringResource(R.string.app_name)
                             topBarState.value = Pair(true, screenName)
                         }
                     }

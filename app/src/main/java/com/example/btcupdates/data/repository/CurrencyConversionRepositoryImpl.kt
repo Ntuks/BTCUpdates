@@ -28,38 +28,61 @@ class CurrencyConversionRepositoryImpl @Inject constructor(
         amount: Double
     ): Flow<Result<ConversionData>> {
         return try {
-            flow<Result.Success<ConversionData>> {
+            flow {
                 to.forEach {
-                    val conversionData = apiService.convertCurrency(it.value, from.value, amount)
-                    emit(Result.Success(conversionData))
+                    val response = apiService.convertCurrency(it.value, from.value, amount)
+
+                    if (response.code() == 200) {
+                        emit(Result.Success(response.body()))
+                    } else {
+                        val message = response.errorBody()?.charStream()?.readText()
+                        Exception(message).printStackTrace()
+
+                        emit(Result.Error(message = errorMessage))
+                    }
                 }
             }
         } catch (exception: Exception) {
             exception.printStackTrace()
             flow<Result.Error<ConversionData>> {
-                Result.Error<ConversionData>(message = "Error getting conversion data.")
+                Result.Error<ConversionData>(message = errorMessage)
             }
         }
     }
 
-    override suspend fun getCurrencyFluctuation(
+    override fun getCurrencyFluctuation(
         endDate: String,
-        startDate: String
-    ): Result<FluctuationData> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getLatestExchangeRate(
+        startDate: String,
         base: CURRENCY,
         symbols: List<CURRENCY>
-    ): Result<LatestConversionData> {
-        TODO("Not yet implemented")
+    ): Flow<Result<FluctuationData>> {
+        return try {
+            flow {
+                val response = apiService.getCurrencyFluctuation(
+                    endDate = endDate,
+                    startDate = startDate,
+                    base = base.name,
+                    symbols = symbols.joinToString().replace(" ", "")
+                )
+
+                if (response.code() == 200) {
+                    emit(Result.Success(response.body()))
+                } else {
+                    val message = response.errorBody()?.charStream()?.readText()
+                    Exception(message).printStackTrace()
+
+                    emit(Result.Error(message = errorMessage))
+                }
+            }
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            flow<Result.Error<FluctuationData>> {
+                Result.Error<FluctuationData>(message = errorMessage)
+            }
+        }
     }
 
-    override suspend fun getHistoricalExchangeRate(
-        endDate: String,
-        startDate: String
-    ): Result<HistoricalData> {
-        TODO("Not yet implemented")
+    companion object {
+        private const val errorMessage = "Error getting data."
     }
 }

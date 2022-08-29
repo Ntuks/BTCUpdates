@@ -15,7 +15,7 @@ data class Info(
 )
 
 data class Query(
-    val amount: Int = 0,
+    val amount: Double = 0.0,
     val from: String = "",
     val to: String = ""
 )

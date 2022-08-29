@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">BTCUpdates</string>
+    <string name="app_name">Bitcoin Value Updates</string>
 
-    <!-- Navigation   -->
+    <!-- Bottom Navigation -->
     <string name="screen_title_home">Home</string>
     <string name="screen_title_history">History</string>
 
@@ -12,4 +12,21 @@
     <string name="enter_bitcoin_value">How much Bitcoin do you currently own?</string>
     <string name="update_bitcoin_value">Do you want to update your Bitcoin value?</string>
     <string name="done">Done</string>
+
+    <!-- Dashboard -->
+    <string name="currency">Currency</string>
+    <string name="value">Value</string>
+    <string name="indicator">Indicator</string>
+
+    <!-- Home Screen -->
+    <string name="recorded_value">Currently Recorded Value:</string>
+    <string name="fiat_currency">FIAT Currency Conversions:</string>
+    <string name="daily_indicator">Daily fluctuation indicator</string>
+
+    <!-- History Screen -->
+    <string name="history_screen_description">
+        The Bitcoin\'s current value compared to the value from 30 days ago:
+    </string>
+    <string name="thirty_day_indicator">30 day fluctuation indicator</string>
+
 </resources>

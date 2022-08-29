@@ -1,4 +1,4 @@
-package com.example.btcupdates.presentation.dashboard.home
+package com.example.btcupdates.presentation.dashboard.history
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 @Composable
-fun HomeScreen(
+fun HistoryScreen(
     bitcoinCurrentValue: Float,
     viewModel: DashboardViewModel
 ) {
@@ -34,13 +34,11 @@ fun HomeScreen(
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val snackBarHostState = remember { mutableStateOf(SnackbarHostState()) }
 
-    if (state.conversionData.isEmpty() && viewModel.cachedValueFlow == null) {
+    if (state.thirtyDayFluctuationData.isEmpty() && state.errorMessage == null) {
         viewModel.cachedValueFlow = bitcoinCurrentValue.toDouble()
 
-        val (startDate, endDate) = getStartAndEndDate(Calendar.DAY_OF_MONTH)
-
-        viewModel.convertToFIATCurrencies()
-        viewModel.getFluctuationData(startDate, endDate)
+        val (startDate, endDate) = getStartAndEndDate(Calendar.MONTH)
+        viewModel.getFluctuationData(startDate, endDate, false)
     }
 
     ConstraintLayout (
@@ -58,17 +56,17 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DashboardHeader(
-                title = stringResource(R.string.recorded_value),
+                title = stringResource(R.string.history_screen_description),
                 bitcoinCurrentValue = bitcoinCurrentValue.toString()
             )
             if (state.isLoading){
                 CircularProgressIndicator()
             } else {
-                DashboardList(state.conversionData, state.dailyFluctuationData)
+                DashboardList(state.conversionData, state.thirtyDayFluctuationData)
             }
-            DashboardFooter(stringResource(R.string.daily_indicator))
-
+            DashboardFooter(stringResource(R.string.thirty_day_indicator))
         }
+
         if(!state.errorMessage.isNullOrEmpty()) {
             coroutineScope.launch {
                 snackBarHostState.value.showSnackbar(

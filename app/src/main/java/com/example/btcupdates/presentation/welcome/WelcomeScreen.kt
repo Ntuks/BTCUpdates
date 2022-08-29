@@ -23,18 +23,15 @@ fun WelcomeScreen(
     navController: NavController,
     viewModel: WelcomeViewModel
 ) {
+    val state = viewModel.state
     val cachedValueState = viewModel.cachedValueFlow.collectAsState(null)
     val text = remember{ mutableStateOf("") }
 
-    if (viewModel.state.amount == null && cachedValueState.value != null) {
+    var bitcoinMessageId = state.bitcoinMessageId
+    if (state.amount == null && cachedValueState.value != null) {
         text.value = cachedValueState.value.toString()
-    }
-
-    val bitcoinMessageId = remember {
-        if (cachedValueState.value != null) {
-            R.string.update_bitcoin_value
-        } else
-            R.string.enter_bitcoin_value
+        bitcoinMessageId = R.string.update_bitcoin_value
+        viewModel.onEvent(WelcomeScreenEvent.AddEditBitcoin(cachedValueState.value!!))
     }
 
     Column(
@@ -64,7 +61,8 @@ fun WelcomeScreen(
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.currency_bitcoin),
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp)
                 )
             },
             maxLines = 1,
@@ -73,20 +71,20 @@ fun WelcomeScreen(
                 .fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             onValueChange = {
-                text.value = it
-                if (it.isNotEmpty())
+                text.value = it.trimEnd()
+                if (text.value.isNotEmpty() && text.value != state.amount.toString())
                     viewModel.onEvent(WelcomeScreenEvent.AddEditBitcoin(it.toDouble()))
             }
         )
 
         Button(
-            enabled = cachedValueState.value != null,
+            enabled = state.amount != null,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, top = 120.dp, end = 16.dp),
             onClick = {
                 viewModel.onEvent(WelcomeScreenEvent.SaveBitcoin)
-                navController.navigate(Screen.Home.route) {
+                navController.navigate("${Screen.Home.route}/${text.value}") {
                     navController.graph.startDestinationRoute?.let { route ->
                         popUpTo(route) {
                             saveState = true
