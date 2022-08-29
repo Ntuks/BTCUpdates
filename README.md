@@ -9,9 +9,10 @@ git clone git@github.com:Ntuks/BTCUpdates.git
 ```
 
 ## Configuration
-### Keystores:
-Create a `local.properties` file with the following info:
+### Environment:
+Create a `local.properties` file in root `dir` of the project with the following info:
 ```
+sdk.dir=
 storePassword=...
 keyAlias=...
 keyPassword=...
@@ -19,9 +20,9 @@ storeFile=../keystore/app-keystore.jks
 fixerApiKey=...
 baseApiUrl="https://api.apilayer.com/fixer/"
 ```
-And create a keystore file and place it under the `keystore/` directory:
-- `playstore.keystore`
-- `stage.keystore`
+
+### Keystore:
+And create a keystore file and place it under the `keystore/` directory and name it`app-keystore.jks`
 
 
 ## Build variants
